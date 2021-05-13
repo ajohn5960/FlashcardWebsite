@@ -1,0 +1,22 @@
+
+
+<div class="navigation">
+    <div id="home">
+        <a href="{% url 'home' %}">Home</a> 
+    </div>
+    {% if request.user.is_authenticated %}
+    <div id="my_sets">
+        <a href="{% url 'sets:list_sets' %}">My Sets</a>
+    </div>
+    <div id="my_profile">
+        <a href="{% url 'user_profiles:user-profile' %}">My Profile: {{ request.user.username }}</a>
+    </div>
+    {% else %}
+    <div id="login_navbar">
+        <a href="{% url 'login' %}">Log-in</a>
+    </div>
+    <div id="signup_navbar">
+        <a href="{% url 'accounts:signup' %}">Sign-up</a>
+    </div>
+    {% endif %}
+</div>

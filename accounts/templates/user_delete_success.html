@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block link_style %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static '/user_profile/profile.css' %}" />
+
+{%endblock link_style %}
+
+
+
+{% block main_content %}
+
+<div class="main_content">
+    <h1>User has been successfully deleted</h1>
+
+    <a href="{% url 'home' %}" class="action_button"> Go To Home </a>
+</div>
+
+
+
+{% endblock main_content %}

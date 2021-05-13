@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+
+
+
+
+{% block link_style %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static '/set/set.css' %}" />
+
+{%endblock link_style %}
+
+
+
+
+{% block main_content %}
+<div class="main_content"> 
+    <h1>{{ my_set.name }}</h1>
+
+    <hr>
+    <br>
+    <input id="timezone" type="hidden" name="timezone" value="">
+
+
+
+    <form id="star_form" style="display: none;" action='.' method='POST' >{% csrf_token %}
+        {{ star_formset.management_form}}
+        {{ star_formset.as_p }}
+        <!-- <input type="submit"> -->
+        <!-- <input class="form_button" id="create_btn" type='submit' value='Star'/>  -->
+    </form> 
+
+    <div class="slideshow_container">
+        {% for instance in flashcard_list %}
+        
+        
+        <div class="flashcard" >
+            <div class="flashcard_inner" onclick="flipFlashcard()">
+                <div class="flashcard_side_one">
+
+              
+                        <button style="z-index: 3;" class="id_form-{{ forloop.counter0 }}-star" onclick="starFlashcard(this)">
+                            {% if instance.star %}
+                                Unstar
+                            {% else %}
+                                Star
+                            {% endif %}
+                        </button>
+                  
+                   
+                    <p ><strong>Term: </strong> {{ instance.side_one }}</p>
+                    
+                    
+                </div>
+               <div class="flashcard_side_two">
+                  
+                        <button style="z-index: 3;" class="id_form-{{ forloop.counter0 }}-star" onclick="starFlashcard(this)" >
+                            {% if instance.star %}
+                                Unstar
+                            {% else %}
+                                Star
+                            {% endif %}
+                        </button>
+                   
+                   
+                    <p ><strong>Definition: </strong> {{ instance.side_two }}</p>
+               </div>
+            </div>
+        </div>
+       
+        {% endfor %}
+      
+        <br>
+        
+       
+        <div class="arrow_container">
+            <a class="arrow" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="arrow" onclick="plusSlides(1)">&#10095;</a>
+            <!-- <a class="arrow" onclick="flipFlashcard()">Flip</a> -->
+        </div>
+        
+    </div>
+
+    <script>
+        var slideIndex = 1;
+        var isSideOne = true;
+        var moveRight = true; 
+        var slides = document.getElementsByClassName("flashcard");
+        var flashcard_inner = document.getElementsByClassName("flashcard_inner");
+        var flashcardSideOne = document.getElementsByClassName("flashcard_side_one"); 
+        var flashcardSideTwo= document.getElementsByClassName("flashcard_side_two"); 
+
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        console.log(tz);
+        var timezone_input = document.getElementById("timezone");
+        timezone_input.value = tz;
+
+
+        showSlides(slideIndex);
+
+              
+
+
+        function starFlashcard(button){
+            event.stopPropagation();
+            console.log("star button clicked!"); 
+            var buttonClass = button.getAttribute('class');
+             
+            console.log(buttonClass); 
+            var starCheckbox = document.getElementById(buttonClass); 
+            starCheckbox.checked = !starCheckbox.checked;
+            
+            document.getElementById("star_form").submit();  
+        }
+
+        function flipFlashcard(){
+                if(isSideOne){
+                    flashcard_inner[slideIndex -1].style.transform = "rotateX(180deg)"; 
+                }
+                else{
+                    flashcard_inner[slideIndex -1].style.transform = "none"; 
+                }
+                isSideOne = !isSideOne; 
+        }
+
+     
+  
+
+        function plusSlides(n) {
+            if(slides.length == 0){
+                // no flashcards in the set
+                return;
+            }
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            // slideFlashcardLeft(); 
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            if(slides.length == 0){
+                // no flashcards in the set
+                var noFlashCardMessage = document.createElement('p');
+                noFlashCardMessage.innerText = "No flashcard has been added to this set. To add flashcards, edit the set.";
+                var slideShowContainer = document.getElementsByClassName("slideshow_container");
+                slideShowContainer[0].appendChild(noFlashCardMessage); 
+                var arrowButtons = document.getElementsByClassName("arrow");
+                for(var i = 0; i < arrowButtons.length; i++){
+                    arrowButtons[i].style.display = "none"; 
+                }
+                
+                var editSetLink = document.createElement('a');
+                editSetLink.setAttribute("class",  "action_button");
+                editSetLink.href = "{% url 'sets:set_edit' set_id=my_set.id %}"; 
+                editSetLink.innerText = "Edit Set"; 
+                slideShowContainer[0].appendChild(editSetLink); 
+                return;
+            }
+            var i;
+            if (n > slides.length) {
+                slideIndex = 1;
+            }
+            if (n < 1) {
+                slideIndex = slides.length;
+            }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+                flashcardSideTwo[i].style.display = "none"; 
+            }
+            slides[slideIndex - 1].style.display = "block";
+            flashcardSideTwo[slideIndex -1].style.display = "block"; 
+            
+        }
+        // put flipflashcard function here
+        function slideFlashcardLeft(){
+            slides[slideIndex -1].style.transform = "rotateY(-70deg)"; 
+            flashcard_inner[slideIndex -1].style.transform = "rotateY(-70deg)"; 
+            flashcardSideOne[slideIndex -1].style.transform = "rotateY(180deg)";  
+
+        }
+        function slideFlashcardRight(){
+            slides[slideIndex -1].style.transform = "rotateY(70deg)"; 
+            flashcard_inner[slideIndex -1].style.transform = "rotateY(70deg)"; 
+            flashcardSideOne[slideIndex -1].style.transform = "rotateY(180deg)"; 
+
+        }
+
+
+
+    window.onload = function getTimezone(){
+        var star_form = document.getElementById("star_form");
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        console.log(tz);
+
+        var timezone_input = document.createElement("input");
+        timezone_input.type = "hidden";
+        timezone_input.name = "timezone"; 
+        timezone_input.value = tz; 
+
+
+        var num_forms2 = document.getElementById("id_flashcard_set-TOTAL_FORMS");
+        star_form.insertBefore(timezone_input, num_forms2);
+        
+    }
+
+    
+    </script>
+
+
+
+
+    {%endblock main_content %}

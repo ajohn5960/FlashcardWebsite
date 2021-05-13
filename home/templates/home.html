@@ -1,0 +1,49 @@
+
+
+{% extends 'base.html' %}
+
+
+
+
+
+
+{% block main_content %}
+<div class="title_header">
+    <h1>Welcome To Flashcards</h1>
+    <p>Learn anything by creating your own flashcards.</p>   
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'user_profiles:user-profile' %}" id="signup_header">My Profile: {{ request.user.username }}</a>
+    {% else %}
+        <a href= "{% url 'accounts:signup' %}" id="signup_header">Sign-Up</a>
+    {% endif %} 
+   
+</div>
+
+
+
+<div class="info_block_wrap">
+    <div id="block1" class="info_block">
+        <h3>Explore Various Subjects</h3>
+        <p>Find flashcard sets from a variety of subjects.</p>    
+    </div>
+    
+    <div id="block2" class="info_block">
+        <h3>Explore Various Subjects</h3>
+        <p>Find flashcard sets from a variety of subjects.</p>    
+    </div>
+    
+    <div id="block3" class="info_block">
+        <h3>Explore Various Subjects</h3>
+        <p>Find flashcard sets from a variety of subjects.</p>    
+    </div>
+</div>
+
+
+
+{% endblock main_content %}
+
+
+
+
+
+

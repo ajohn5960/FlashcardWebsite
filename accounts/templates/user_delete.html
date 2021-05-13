@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block link_style %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static '/user_profile/profile.css' %}" />
+
+{%endblock link_style %}
+
+{% block main_content %}
+
+<div class="main_content">
+   
+
+
+    <form class="delete_account_form" action='.' method='POST'> {% csrf_token %}
+        <h1 class="delete_header">Delete Account</h1>
+        <hr><br>
+        <h3 class="delete_message">Are you sure you want to delete {{ current_user.username }}? 
+            <br>There is no going back. </h3>
+        <input id="delete_button" class="form_button" type='submit' value='Delete Account'/> 
+        <a id="cancel_button" class="action_button" href="{% url 'user_profiles:user-profile' %}"> Cancel </a>
+    </form>
+    
+    
+</div>
+
+
+{%endblock main_content%}

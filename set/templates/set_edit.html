@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block link_style %}
+{% load static %}
+<link rel="stylesheet" href="{% static '/set/set.css' %}" />
+
+{% endblock link_style %}
+
+{% block main_content %}
+
+
+<script>
+    
+
+    window.onload = function deleteDuplicateHeaders(){
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        console.log(tz);
+
+        var timezone_input = document.createElement("input");
+        timezone_input.type = "hidden";
+        timezone_input.name = "timezone"; 
+        timezone_input.value = tz; 
+
+
+        var create_set_form = document.getElementById("create_set_form");
+        var num_forms = document.getElementById("id_flashcard_set-TOTAL_FORMS");
+        var intial_forms = document.getElementById("id_flashcard_set-INITIAL_FORMS"); 
+        var min_forms = document.getElementById("id_flashcard_set-MIN_NUM_FORMS"); 
+        var max_forms = document.getElementById("id_flashcard_set-MAX_NUM_FORMS");  
+
+        if(num_forms!=null && intial_forms!=null
+                 && min_forms !=null && max_forms !=null){
+            create_set_form.removeChild(num_forms); 
+            create_set_form.removeChild(intial_forms); 
+            create_set_form.removeChild(min_forms); 
+            create_set_form.removeChild(max_forms); 
+        }
+
+        var num_forms2 = document.getElementById("id_flashcard_set-TOTAL_FORMS");
+        create_set_form.insertBefore(timezone_input, num_forms2);
+
+
+        
+
+        var add_btn = document.getElementById("add_btn"); 
+
+        
+        var arrOfPara = create_set_form.getElementsByTagName("p");
+
+        var flashcard_container = document.createElement("div");
+        flashcard_container.setAttribute("class",  "flashcard_container");
+
+        for(var i = 1; i < arrOfPara.length; i++){
+
+            var para = create_set_form.removeChild(arrOfPara[2]);
+            if ( (i-1)%3 == 0){
+                para.setAttribute("class",  "side_two");
+                flashcard_container.appendChild(para);
+            }
+            if ( (i-2)%3 == 0){ 
+                para.setAttribute("class",  "side_one");
+                flashcard_container.appendChild(para);
+            }
+            if(  i%3 == 0  ){
+                para.setAttribute("class",  "delete_checkbox");
+                flashcard_container.appendChild(para);
+
+                console.log("in if"); 
+                create_set_form.insertBefore(flashcard_container, add_btn); 
+                flashcard_container = document.createElement("div");
+                flashcard_container.setAttribute("class",  "flashcard_container"); 
+            } 
+        }
+        var para = create_set_form.removeChild(arrOfPara[2]);
+        para.setAttribute("class",  "delete_checkbox"); 
+        flashcard_container.appendChild(para); 
+        create_set_form.insertBefore(flashcard_container, add_btn); 
+        
+    }
+    
+    function addFlashCardField(){
+        
+        var create_set_form = document.getElementById("create_set_form");
+        var total_forms = document.getElementById("id_flashcard_set-TOTAL_FORMS"); 
+        total_forms.value = ++total_forms.value; 
+        form_index = total_forms.value -1; 
+  
+
+        var add_btn = document.getElementById("add_btn"); 
+ 
+        var flashcard_container = document.createElement("div");
+        flashcard_container.setAttribute("class",  "flashcard_container");
+        var paragraph_one = document.createElement("p");
+        paragraph_one.setAttribute("class",  "side_one"); 
+
+        var side_one = document.createElement("textarea");
+        side_one.name = `flashcard_set-${form_index}-side_one`;
+        side_one.cols = "55"; 
+        side_one.rows = "6"; 
+        side_one.id = `id_flashcard_set-${form_index}-side_one`;
+        side_one.placeholder = "Enter Term";  
+        paragraph_one.appendChild(side_one); 
+
+        
+
+        var paragraph_two = document.createElement("p");
+        paragraph_two.setAttribute("class",  "side_two");
+        var side_two = document.createElement("textarea");
+        side_two.name = `flashcard_set-${form_index}-side_two`;
+        side_two.cols = "55"; 
+        side_two.rows = "6"; 
+        side_two.id = `id_flashcard_set-${form_index}-side_two`; 
+        side_two.placeholder = "Enter Definition"; 
+        paragraph_two.appendChild(side_two);  
+
+
+
+        var paragraph_three = document.createElement("p");
+        paragraph_three.setAttribute("class",  "delete_checkbox");
+        var label_three = document.createElement("label");
+        label_three.htmlFor = `id_flashcard_set-${form_index}-DELETE`;
+        label_three.innerHTML = "Delete: "; 
+        paragraph_three.appendChild(label_three); 
+        var check_box = document.createElement("input");
+        check_box.type = "checkbox";
+        check_box.name = `flashcard_set-${form_index}-DELETE`; 
+        check_box.id = `id_flashcard_set-${form_index}-DELETE`; 
+        paragraph_three.appendChild(check_box); 
+        var hidden_one = document.createElement("input"); 
+        hidden_one.type = "hidden"; 
+        hidden_one.name = `flashcard_set-${form_index}-id`; 
+        hidden_one.id = `id_flashcard_set-${form_index}-id`; 
+        paragraph_three.appendChild(hidden_one); 
+        var hidden_two = document.createElement("input"); 
+        hidden_two.type = "hidden"; 
+        hidden_two.name = `flashcard_set-${form_index}-set`; 
+        hidden_two.id = `id_flashcard_set-${form_index}-set`; 
+        paragraph_three.appendChild(hidden_two); 
+        
+        
+        flashcard_container.appendChild(paragraph_one);  
+        flashcard_container.appendChild(paragraph_two);  
+        flashcard_container.appendChild(paragraph_three); 
+        create_set_form.insertBefore(flashcard_container, add_btn);  
+    }
+
+  
+</script>
+
+
+<form id="create_set_form" action='.' method='POST' >{% csrf_token %}
+    <h1>Edit Set</h1>
+    {{ set_form.as_p }}
+    <hr>
+    <br>
+    {{ formset.management_form}}
+    {{ formset.as_p }}
+    <input id="add_btn" type="button" value="add flashcard" onclick="addFlashCardField()"><br>
+    <input class="form_button" type='submit' value='Save'/> 
+</form> 
+
+
+
+{%endblock main_content %}

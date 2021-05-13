@@ -1,0 +1,18 @@
+{% for instance in flashcard_list %}
+
+<div class="flashcard_container">
+    <div class="flashcard_side1">
+        <p><strong>Term: </strong> {{ instance.side_one }}</p>
+
+    </div>
+
+
+    <div class="flashcard_side2">
+        <p><strong>Definition: </strong>{{ instance.side_two }}</p>
+    </div>
+
+</div>
+
+
+
+{% endfor %}

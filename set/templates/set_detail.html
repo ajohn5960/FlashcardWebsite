@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+
+
+{% block link_style %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static '/set/set.css' %}" />
+
+{%endblock link_style %}
+
+
+
+
+{% block main_content %}
+<div class="main_content">
+    <h1>{{ my_set.name }}</h1>
+    <h1> Created By: {{ my_set.user }} </h1>
+
+<a class = "action_button" href="{% url 'sets:set_edit' set_id=my_set.id %}" >Edit Set</a>
+<a class= "action_button" href="{% url 'sets:set_delete' set_id=my_set.id %}" >Delete Set</a>
+<a class= "action_button" href="{% url 'sets:set_study' set_id=my_set.id %}" >Study Set</a>
+
+<hr>
+<br>
+
+{% include 'flashcard_list.html' %} <br>
+
+</div>
+
+
+
+
+
+
+{%endblock main_content %}

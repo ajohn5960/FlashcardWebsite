@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+
+
+{% block link_style %}
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static '/set/set.css' %}" />
+
+{%endblock link_style %}
+{% block main_content %}
+
+<div class="main_content">
+    <h1>Delete Set</h1>
+    <hr>
+    <form action='.' method='POST'> {% csrf_token %}
+        <h3>Are you sure you want to delete "{{ set_name }}" ? </h3>
+        <input class="form_button" type='submit' value='Yes'/> 
+    </form>
+</div>
+
+
+{% endblock main_content %}

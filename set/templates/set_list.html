@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+
+{% block link_style %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static '/set/set.css' %}" />
+
+{%endblock link_style %}
+
+
+
+
+{% block main_content %}
+<div class="main_content">
+    <h1>My Flashcard Sets</h1>
+    <a class= "action_button" id="create_set_link" href="{% url 'sets:set_create' %}" >Create Set</a>
+    <hr>
+    <br>
+  
+    <form id = "sort_form" action='.' method='POST' >{% csrf_token %}
+       
+        {{ sort_form.as_p }}
+        
+    </form> 
+
+    
+    {% for instance in set_list %}          
+        <a  class="set_card" href='{{instance.get_absolute_url}}'>  
+            <strong>{{ instance.name}} </strong> <br>
+            <small>created on: {{instance.date_created}} </small><br>
+            <small>last modified: {{instance.last_modified }} </small><br>
+            <small>last studied: {{instance.last_studied }} </small>
+        </a> <br>
+        <br>
+       
+    {% endfor %}
+</div>
+
+<script>
+
+    const myForm = document.getElementById("sort_form"); 
+    document.querySelector('select.submit').addEventListener("change", function(){
+
+        myForm.submit();
+
+    });
+
+
+  
+</script>
+
+{% endblock main_content %}

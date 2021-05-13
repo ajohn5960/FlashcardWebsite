@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+{% block main_content %}
+<div class="form_background">
+    <div class="account_form" id="signup_form">
+        <h3>Sign-Up</h3>
+        <p id="login_text">
+            Have an account? <a href="{% url 'login' %}">Login</a>
+        </p>
+        <form action='.' method='POST'> {% csrf_token %}
+            {{ form.as_p }}
+        
+            <input type='submit' value='Sign Up'/> 
+        </form>
+    </div>
+</div>
+
+
+
+{%endblock main_content%}
