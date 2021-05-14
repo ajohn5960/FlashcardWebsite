@@ -22,7 +22,7 @@ Used the Django web framework to create a website where users can:
  [![Watch the video]( https://img.youtube.com/vi/ICxe1G4jRtc/0.jpg)](https://youtu.be/ICxe1G4jRtc)
  
 ## Resources
-- learned the basics of Django from [this helpful tutorial](https://www.youtube.com/watch?v=F5mRW0jo-U4):
+- learned the basics of Django from [this helpful video tutorial](https://www.youtube.com/watch?v=F5mRW0jo-U4)
      
 - researched about how to do web animations for the study flashcard page:
      - learned how to flip a card using CSS from [this interactive tutorial](https://www.w3schools.com/howto/howto_css_flip_card.asp)
